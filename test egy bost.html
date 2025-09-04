@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<title>نموذج تسجيل بيانات الطلب</title>
+<style>
+  body { font-family: Arial, sans-serif; direction: rtl; padding: 20px; }
+  input, textarea { width: 300px; padding: 5px; margin-bottom: 10px; }
+  button { padding: 10px 20px; background-color: #4CAF50; color: white; border: none; cursor: pointer; }
+  button:hover { background-color: #45a049; }
+  .success { color: green; margin-top: 10px; }
+</style>
+</head>
+<body>
+<h2>نموذج تسجيل بيانات الطلب</h2>
+<form id="orderForm">
+  <label>Description:</label><br>
+  <input type="text" name="Description" required><br>
+
+  <label>Total Weight:</label><br>
+  <input type="number" name="Total_Weight" required><br>
+
+  <label>Package Volume:</label><br>
+  <input type="text" name="Package_volume" required><br>
+
+  <label>COD Value:</label><br>
+  <input type="number" name="COD_Value" required><br>
+
+  <label>Item Special Notes:</label><br>
+  <textarea name="Item_Special_Notes"></textarea><br>
+
+  <label>Customer Name:</label><br>
+  <input type="text" name="Customer_Name" required><br>
+
+  <label>Mobile No:</label><br>
+  <input type="tel" name="Mobile_No" pattern="[0-9]{10}" required><br>
+
+  <label>Street:</label><br>
+  <input type="text" name="Street"><br>
+
+  <label>City:</label><br>
+  <input type="text" name="City"><br><br>
+
+  <button type="submit">سجل</button>
+</form>
+<div class="success" id="successMsg"></div>
+
+<script>
+document.getElementById("orderForm").addEventListener("submit", async function(e){
+  e.preventDefault();
+
+  const data = {
+    Description: this.Description.value,
+    Total_Weight: this.Total_Weight.value,
+    Package_volume: this.Package_volume.value,
+    COD_Value: this.COD_Value.value,
+    Item_Special_Notes: this.Item_Special_Notes.value,
+    Customer_Name: this.Customer_Name.value,
+    Mobile_No: this.Mobile_No.value,
+    Street: this.Street.value,
+    City: this.City.value
+  };
+
+  try {
+    const response = await fetch("https://script.google.com/macros/s/AKfycbxcMBWLctlyoHsWvmfcsVFMVy8eP0M8odUX-8kPltkNjHq8fL-lb2yNmzQ3CslPdMyEQw/exec", {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: { "Content-Type": "application/json" }
+    });
+
+    const result = await response.text();
+    document.getElementById("successMsg").innerText = result;
+    this.reset();
+  } catch(err) {
+    document.getElementById("successMsg").innerText = "حدث خطأ! حاول مرة أخرى.";
+    console.error(err);
+  }
+});
+</script>
+</body>
+</html>
